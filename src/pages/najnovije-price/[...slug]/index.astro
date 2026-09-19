@@ -1,0 +1,486 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Recommended from '../../../components/Recommended.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+	const price = await getCollection('price');
+
+	return price.map((story) => ({
+		params: { slug: story.id },
+		props: { story },
+	}));
+}
+
+const { story } = Astro.props;
+
+const {
+	title,
+	description,
+	thumbnail,
+	youtube,
+	duration,
+	type,
+} = story.data;
+
+const videoType = type === 'long' ? 'LONG FORM' : 'SHORT';
+---
+
+<Layout
+	title={`${title} — 10devet`}
+	description={description}
+	ogImage={thumbnail}
+>
+	<section class="story-page">
+
+		<!-- HEADER -->
+		<div class="story-header">
+
+			<p class="section-label">
+				10DEVET · PRIČA
+			</p>
+
+			<h1>{title}</h1>
+
+			<p class="description">
+				{description}
+			</p>
+
+			<div class="meta">
+				<span>{videoType}</span>
+				<span>·</span>
+				<span>{duration}</span>
+			</div>
+
+		</div>
+
+
+		<!-- VIDEO -->
+		{youtube ? (
+			<div
+				class="video-wrapper"
+				data-youtube={youtube}
+			>
+				{thumbnail ? (
+					<button
+						class="video-preview"
+						type="button"
+						aria-label={`Pusti video: ${title}`}
+					>
+						<img
+							src={thumbnail}
+							alt={title}
+						/>
+
+						<span class="play-button">
+							▶
+						</span>
+					</button>
+				) : (
+					<div class="video-placeholder">
+						<span>VIDEO</span>
+					</div>
+				)}
+			</div>
+		) : (
+			<div class="video-placeholder">
+				<span>VIDEO USKORO</span>
+			</div>
+		)}
+
+
+		<!-- STORY TEXT -->
+		<article class="story-content">
+
+			<div class="content-label">
+				<span>10DEVET</span>
+				<span>PRIČA</span>
+			</div>
+
+			<div class="content-text">
+				
+
+				<div class="story-body">
+					<Fragment set:html={story.body} />
+				</div>
+			</div>
+
+		</article>
+
+
+		<!-- RECOMMENDED -->
+		<Recommended />
+		
+
+<div class="view-all-stories">
+	<a href="/najnovije-price">
+		POGLEDAJ SVE PRIČE
+		<span>→</span>
+	</a>
+</div>
+
+	</section>
+</Layout>
+
+
+<script>
+	document
+		.querySelectorAll<HTMLElement>('.video-wrapper[data-youtube]')
+		.forEach((wrapper) => {
+
+			const button = wrapper.querySelector(
+				'.video-preview .play-button'
+			);
+
+			if (!button) return;
+
+			button.addEventListener('click', () => {
+
+				const youtube = wrapper.dataset.youtube;
+
+				const videoId = youtube?.includes('/shorts/')
+					? youtube
+							.split('/shorts/')[1]
+							.split(/[?&]/)[0]
+					: youtube
+							?.split('v=')[1]
+							?.split('&')[0];
+
+				if (!videoId) return;
+
+				wrapper.innerHTML = `
+    <iframe
+        class="youtube-player"
+        src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+        title="YouTube video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+    ></iframe>
+`;
+			});
+		});
+</script>
+
+
+<style>
+
+	.story-page {
+		background: var(--black);
+		padding-top: 120px;
+	}
+
+
+	/* HEADER */
+
+	.story-header {
+		width: min(1200px, 86vw);
+		margin: 0 auto;
+		padding: 70px 0 55px;
+	}
+
+	.section-label {
+		margin: 0 0 25px;
+		color: var(--red);
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.story-header h1 {
+		max-width: 1000px;
+		margin: 0;
+
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(70px, 9vw, 130px);
+		font-weight: 400;
+		line-height: 0.85;
+	}
+
+	.description {
+		max-width: 700px;
+		margin: 35px 0 0;
+
+		color: rgba(224, 214, 205, 0.65);
+		font-size: 17px;
+		line-height: 1.7;
+	}
+
+	.meta {
+		display: flex;
+		gap: 18px;
+		margin-top: 25px;
+
+		color: rgba(224, 214, 205, 0.4);
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+
+	/* VIDEO */
+
+	.video-wrapper {
+		width: min(1200px, 86vw);
+		margin: 0 auto;
+
+		aspect-ratio: 16 / 9;
+		background: #000;
+	}
+
+	.video-wrapper {
+	width: min(1200px, 86vw);
+	margin: 0 auto;
+	aspect-ratio: 16 / 9;
+	background: #000;
+	position: relative;
+	overflow: hidden;
+}
+
+:global(.video-wrapper .youtube-player) {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	border: 0;
+}
+
+	.video-preview {
+		width: 100%;
+		height: 100%;
+
+		padding: 0;
+		border: 0;
+
+		background: #000;
+
+		position: relative;
+		cursor: pointer;
+
+		display: block;
+		overflow: hidden;
+	}
+
+	.video-preview img {
+		width: 100%;
+		height: 100%;
+
+		display: block;
+
+		object-fit: cover;
+
+		transition: transform 0.4s ease;
+	}
+
+	.video-preview:hover img {
+		transform: scale(1.03);
+	}
+
+	.play-button {
+		position: absolute;
+
+		top: 50%;
+		left: 50%;
+
+		transform: translate(-50%, -50%);
+
+		width: 76px;
+		height: 76px;
+
+		border-radius: 50%;
+
+		background: var(--red);
+		color: var(--off-white);
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		font-size: 22px;
+		padding-left: 4px;
+	}
+
+	.video-placeholder {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+
+		background: #111;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		color: rgba(224, 214, 205, 0.35);
+
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+
+	/* STORY */
+
+	.story-content {
+		width: min(1200px, 86vw);
+
+		margin: 0 auto;
+
+		padding: 100px 70px 110px;
+
+		display: grid;
+		grid-template-columns: 0.35fr 1fr;
+		gap: 80px;
+
+		border-bottom: 1px solid rgba(224, 214, 205, 0.1);
+	}
+
+	.content-label {
+		display: flex;
+		flex-direction: column;
+
+		gap: 12px;
+
+		padding-top: 8px;
+
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+
+		color: var(--red);
+	}
+
+	.content-text {
+		max-width: 750px;
+	}
+
+	.content-text h2 {
+		margin: 0 0 40px;
+
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(70px, 8vw, 120px);
+
+		line-height: 0.85;
+	}
+
+	.story-body {
+		max-width: 700px;
+
+		color: rgba(224, 214, 205, 0.72);
+
+		font-size: 17px;
+		line-height: 1.9;
+	}
+
+	.story-body p {
+		margin: 0 0 28px;
+	}
+
+	.story-body p:last-child {
+		margin-bottom: 0;
+	}
+	/* VIEW ALL STORIES */
+
+.view-all-stories {
+	width: min(1200px, 86vw);
+	margin: 0 auto;
+	padding: 70px 0 100px;
+	display: flex;
+	justify-content: center;
+}
+
+.view-all-stories a {
+	display: inline-flex;
+	align-items: center;
+	gap: 18px;
+
+	padding: 20px 32px;
+
+	border: 1px solid rgba(224, 214, 205, 0.35);
+
+	color: var(--off-white);
+
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+
+	text-decoration: none;
+
+	transition:
+		background 0.3s ease,
+		color 0.3s ease,
+		border-color 0.3s ease;
+}
+
+.view-all-stories a span {
+	font-size: 20px;
+	transition: transform 0.25s ease;
+}
+
+.view-all-stories a:hover {
+	background: var(--red);
+	border-color: var(--red);
+	color: var(--off-white);
+}
+
+.view-all-stories a:hover span {
+	transform: translateX(6px);
+}
+
+
+	/* MOBILE */
+
+	@media (max-width: 800px) {
+
+		.story-header {
+			padding: 50px 0 40px;
+		}
+
+		.story-header h1 {
+			font-size: clamp(60px, 15vw, 90px);
+		}
+
+		.description {
+			font-size: 15px;
+		}
+
+		.story-content {
+			width: 100%;
+
+			padding: 70px 5vw 80px;
+
+			grid-template-columns: 1fr;
+
+			gap: 35px;
+		}
+
+		.content-label {
+			flex-direction: row;
+			justify-content: space-between;
+		}
+
+		.content-text h2 {
+			font-size: 80px;
+		}
+
+		.story-body {
+			font-size: 16px;
+			line-height: 1.8;
+		}
+
+		.play-button {
+			width: 65px;
+			height: 65px;
+			font-size: 18px;
+		}
+			.view-all-stories {
+		width: 100%;
+		padding: 55px 5vw 70px;
+	}
+
+	.view-all-stories a {
+		width: 100%;
+		justify-content: center;
+	}
+	}
+
+</style>

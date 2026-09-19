@@ -1,23 +1,350 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
+
+const title = Astro.props.title ?? '10devet — Fudbal ispričan drugačije';
+const description =
+	Astro.props.description ??
+	'10devet — fudbalske priče, dokumentarci i ljudi iza igre.';
+	const ogImage =
+
+	Astro.props.ogImage ??
+	'https://10devet.com/og-image.jpg';
+	
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="sr">
 	<head>
-		<meta charset="utf-8" />
+		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content="10devet" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<link rel="canonical" href={`https://10devet.com${Astro.url.pathname}`} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+	rel="stylesheet"
+/>
+
+<link rel="icon" type="image/png" href="/favicon.png" />
+
+		<title>{title}</title>
 	</head>
-	<body>
+<body>
+	<div class="page-wipe"></div>
+
+	<Header />
+
+	<main class="page-transition">
 		<slot />
-	</body>
+	</main>
+
+	<BackToTop />
+	<Footer />
+</body>
 </html>
 
-<style>
-	html,
+<style is:global>
+	:root {
+		--black: #080808;
+		--off-white: #e0d6cd;
+		--red: #930f18;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+		background: var(--black);
+	}
+
 	body {
 		margin: 0;
-		width: 100%;
-		height: 100%;
+		min-width: 320px;
+		background: var(--black);
+		color: var(--off-white);
+		font-family: 'Inter', sans-serif;
 	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	button,
+	input,
+	textarea,
+	select {
+		font: inherit;
+	}
+	.page-transition {
+	animation: pageEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pageEnter {
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.page-wipe {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	background: var(--red);
+	transform: translateX(-100%);
+	pointer-events: none;
+}
+
+.page-wipe.active {
+	animation: pageWipe 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@keyframes pageWipe {
+	0% {
+		transform: translateX(-100%);
+	}
+
+	45% {
+		transform: translateX(0);
+	}
+
+	55% {
+		transform: translateX(0);
+	}
+
+	100% {
+		transform: translateX(100%);
+	}
+}
+/* =========================================
+   10DEVET — GLOBAL HOVER SYSTEM
+   ========================================= */
+
+/* LINKS */
+
+a {
+	transition:
+		color 0.25s ease,
+		opacity 0.25s ease;
+}
+
+a:hover {
+	color: var(--red);
+}
+
+
+/* BUTTONS */
+
+button {
+	transition:
+		transform 0.25s ease,
+		background 0.25s ease,
+		color 0.25s ease,
+		border-color 0.25s ease;
+}
+
+
+/* IMAGE HOVER */
+
+a img {
+	transition: transform 0.45s ease;
+}
+
+a:hover img {
+	transform: scale(1.04);
+}
+
+
+/* STORY / CONTENT CARDS */
+
+.story-card,
+.recommended-card {
+	transition: transform 0.3s ease;
+}
+
+.story-card:hover,
+.recommended-card:hover {
+	transform: translateY(-6px);
+}
+
+
+/* TITLES INSIDE CARDS */
+
+.story-card h3,
+.recommended-card h3 {
+	transition: color 0.25s ease;
+}
+
+.story-card:hover h3,
+.recommended-card:hover h3 {
+	color: var(--red);
+}
+
+
+/* ARROWS */
+
+.story-card a span,
+.recommended-card span {
+	transition: transform 0.25s ease;
+}
+
+.story-card a:hover span,
+.recommended-card:hover span {
+	transform: translateX(6px);
+}
+
+
+/* IMAGE OVERLAY */
+
+.story-image,
+.card-image {
+	position: relative;
+	overflow: hidden;
+}
+
+.story-image::after,
+.card-image::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(147, 15, 24, 0);
+	pointer-events: none;
+	transition: background 0.3s ease;
+}
+
+.story-card:hover .story-image::after,
+.recommended-card:hover .card-image::after {
+	background: rgba(147, 15, 24, 0.08);
+}
+
+
+/* NAVIGATION */
+
+.desktop-nav a {
+	position: relative;
+}
+
+.desktop-nav a::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -6px;
+	width: 100%;
+	height: 1px;
+	background: var(--red);
+	transform: scaleX(0);
+	transform-origin: right;
+	transition: transform 0.3s ease;
+}
+
+.desktop-nav a:hover::after {
+	transform: scaleX(1);
+	transform-origin: left;
+}
+
+
+/* MENU BUTTON */
+
+.menu-button:hover {
+	transform: scale(1.08);
+}
+
+
+/* PLAY BUTTON */
+
+.play-button {
+	transition:
+		transform 0.3s ease,
+		background 0.3s ease;
+}
+
+a:hover .play-button,
+.video-preview:hover .play-button {
+	transform: translate(-50%, -50%) scale(1.08);
+}
+
+
+/* BACK TO TOP */
+
+button:hover {
+	cursor: pointer;
+}
+
+
+/* MOBILE — NO HOVER ANIMATIONS */
+
+@media (max-width: 800px) {
+	a:hover {
+		color: inherit;
+	}
+
+	a:hover img {
+		transform: none;
+	}
+
+	.story-card:hover,
+	.recommended-card:hover {
+		transform: none;
+	}
+
+	.story-card:hover h3,
+	.recommended-card:hover h3 {
+		color: inherit;
+	}
+
+	.story-card:hover .story-image::after,
+	.recommended-card:hover .card-image::after {
+		background: transparent;
+	}
+
+	.desktop-nav a::after {
+		display: none;
+	}
+}
 </style>
+<script>
+	const pageWipe = document.querySelector('.page-wipe');
+
+	document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
+		link.addEventListener('click', (event) => {
+			const href = link.getAttribute('href');
+
+			if (
+				!href ||
+				href.startsWith('#') ||
+				href.startsWith('http') ||
+				href.startsWith('mailto:') ||
+				link.target === '_blank'
+			) {
+				return;
+			}
+
+			event.preventDefault();
+
+			pageWipe?.classList.add('active');
+
+			setTimeout(() => {
+				window.location.href = href;
+			}, 320);
+		});
+	});
+</script>

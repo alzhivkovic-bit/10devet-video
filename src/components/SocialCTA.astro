@@ -1,0 +1,110 @@
+<section class="social-cta" id="social">
+	<div class="social-content">
+		<p class="eyebrow">10DEVET · PRATI NAS</p>
+
+		<h2>FUDBAL<br />SE NE ZAVRŠAVA<br />NA TERENU.</h2>
+
+		<p class="social-description">
+			Prati 10devet za nove fudbalske priče, dokumentarce i sadržaj
+			koji fudbal priča drugačije.
+		</p>
+	</div>
+
+	<div class="social-links">
+		<a href="https://www.instagram.com/10.devet/" target="_blank" rel="noopener noreferrer">
+			INSTAGRAM <span>↗</span>
+		</a>
+
+		<a href="https://www.youtube.com/@10devet" target="_blank" rel="noopener noreferrer">
+			YOUTUBE <span>↗</span>
+		</a>
+
+		<a href="https://www.facebook.com/10devet/" target="_blank" rel="noopener noreferrer">
+			FACEBOOK <span>↗</span>
+		</a>
+
+		<a href="https://www.tiktok.com/@10devet" target="_blank" rel="noopener noreferrer">
+			TIKTOK <span>↗</span>
+		</a>
+
+		<a href="https://x.com/10devet" target="_blank" rel="noopener noreferrer">
+			X <span>↗</span>
+		</a>
+
+		<a href="https://www.linkedin.com/company/10devet" target="_blank" rel="noopener noreferrer">
+			LINKEDIN <span>↗</span>
+		</a>
+	</div>
+</section>
+
+<style>
+	.social-cta {
+		padding: 140px 5vw;
+		display: grid;
+		grid-template-columns: 1fr 0.8fr;
+		gap: 10vw;
+		background: var(--red);
+		color: var(--off-white);
+	}
+
+	.eyebrow {
+		margin: 0 0 22px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	h2 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(60px, 7vw, 110px);
+		font-weight: 400;
+		line-height: 0.85;
+	}
+
+	.social-description {
+		max-width: 500px;
+		margin: 35px 0 0;
+		font-size: 17px;
+		line-height: 1.6;
+		opacity: 0.8;
+	}
+
+	.social-links {
+		display: flex;
+		flex-direction: column;
+		align-self: end;
+		border-top: 1px solid rgba(224, 214, 205, 0.35);
+	}
+
+	.social-links a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 18px 0;
+		border-bottom: 1px solid rgba(224, 214, 205, 0.35);
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		transition: padding-left 0.25s ease;
+	}
+
+	.social-links a:hover {
+		padding-left: 10px;
+	}
+
+	.social-links span {
+		font-size: 16px;
+	}
+
+	@media (max-width: 800px) {
+		.social-cta {
+			padding: 90px 5vw;
+			grid-template-columns: 1fr;
+			gap: 60px;
+		}
+	}
+	.social-links a:hover {
+	color: var(--off-white);
+}
+</style>

@@ -1,0 +1,267 @@
+---
+const title = 'QPR – PARTIZAN: PREOKRET KOJI JE UŠAO U ISTORIJU';
+
+const description =
+	'Partizan je u Londonu izgubio 6:2 od Queens Park Rangersa. Četiri gola razlike delovala su kao kraj evropske priče. Ali u Beogradu se dogodilo nešto što je malo ko očekivao. Pred svojim navijačima, Partizan je uspeo da nadoknadi ogroman zaostatak i izbori prolaz dalje. Priča o jednom od najpoznatijih evropskih preokreta Partizana, utakmici koja je ostala upisana u istoriju kluba i generaciji koja nije odustala ni kada je sve delovalo izgubljeno.';
+
+const youtube = 'https://www.youtube.com/shorts/XYIZ25zoxcQ';
+const thumbnail = '/partizan_qpr.jpg';
+
+const videoId = youtube.split('/shorts/')[1]?.split(/[?&]/)[0];
+---
+
+<section class="featured-story">
+	<div class="section-header">
+		<div>
+			<p class="eyebrow">10DEVET · STORIES</p>
+			<h2>ISTAKNUTA PRIČA</h2>
+		</div>
+
+		<span class="section-number">01</span>
+	</div>
+
+	<div class="featured-grid">
+
+		<div class="video-wrapper" data-youtube={youtube}>
+			<button
+				class="video-preview"
+				type="button"
+				aria-label={`Pusti video: ${title}`}
+			>
+				<img
+					src={thumbnail}
+					alt={title}
+					loading="lazy"
+				/>
+
+				<span class="play-button">▶</span>
+			</button>
+		</div>
+
+		<div class="featured-info">
+			<p class="story-meta">00:54 · PRIČA</p>
+
+			<h3>{title}</h3>
+
+			<p class="story-description">
+				{description}
+			</p>
+
+			<a href="/najnovije-price/partizan-qpr" class="featured-link">
+				POGLEDAJ PRIČU <span>→</span>
+			</a>
+		</div>
+
+	</div>
+</section>
+
+<script>
+	document.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement;
+
+		const button = target.closest<HTMLButtonElement>('.video-preview');
+
+		if (!button) return;
+
+		const wrapper = button.closest<HTMLElement>('.video-wrapper');
+
+		if (!wrapper) return;
+
+		const youtube = wrapper.dataset.youtube;
+
+		if (!youtube) return;
+
+		const videoId = youtube
+			.split('/shorts/')[1]
+			?.split(/[?&]/)[0];
+
+		if (!videoId) return;
+
+		wrapper.innerHTML = `
+			<iframe
+				src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0"
+				title="YouTube video"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+			></iframe>
+		`;
+	});
+</script>
+<style>
+	.featured-story {
+		padding: 120px 5vw;
+		background: var(--black);
+	}
+
+	.section-header {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		margin-bottom: 40px;
+	}
+
+	.eyebrow {
+		margin: 0 0 14px;
+		color: var(--red);
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	h2 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(42px, 5vw, 72px);
+		font-weight: 400;
+		line-height: 0.9;
+	}
+
+	.section-number {
+		color: rgba(224, 214, 205, 0.3);
+		font-size: 12px;
+		letter-spacing: 0.1em;
+	}
+
+	.featured-grid {
+		display: grid;
+		grid-template-columns: 1.25fr 0.75fr;
+		gap: 50px;
+		align-items: end;
+	}
+
+	/* VIDEO CONTAINER */
+	.video-wrapper {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		background: #000;
+		overflow: hidden;
+	}
+
+	/* YOUTUBE PLAYER */
+	.video-wrapper :global(iframe) {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	border: 0;
+}
+
+	/* VIDEO PREVIEW */
+	.video-preview {
+		position: absolute;
+		inset: 0;
+
+		width: 100%;
+		height: 100%;
+
+		padding: 0;
+		border: 0;
+		background: #000;
+
+		cursor: pointer;
+		display: block;
+
+		overflow: hidden;
+	}
+
+	.video-preview img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+
+		transition: transform 0.4s ease;
+	}
+
+	.video-preview:hover img {
+		transform: scale(1.03);
+	}
+
+	.play-button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+
+		transform: translate(-50%, -50%);
+
+		width: 76px;
+		height: 76px;
+
+		border-radius: 50%;
+
+		background: var(--red);
+		color: var(--off-white);
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		font-size: 22px;
+		padding-left: 4px;
+
+		pointer-events: none;
+	}
+
+	.featured-info {
+		padding-bottom: 4px;
+	}
+
+	.story-meta {
+		margin: 0 0 20px;
+		color: var(--red);
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	h3 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(32px, 3.2vw, 52px);
+		font-weight: 400;
+		line-height: 0.95;
+	}
+
+	.story-description {
+		margin: 24px 0 30px;
+		color: rgba(224, 214, 205, 0.65);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	.featured-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 14px;
+
+		padding-bottom: 8px;
+		border-bottom: 1px solid var(--red);
+
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+
+		transition: gap 0.25s ease;
+	}
+
+	.featured-link:hover {
+		gap: 22px;
+	}
+
+	@media (max-width: 800px) {
+		.featured-story {
+			padding: 80px 5vw;
+		}
+
+		.featured-grid {
+			grid-template-columns: 1fr;
+			gap: 35px;
+		}
+
+		.section-header {
+			margin-bottom: 30px;
+		}
+	}
+</style>

@@ -1,11 +1,25 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedStory from '../components/FeaturedStory.astro';
+import LatestStories from '../components/LatestStories.astro';
+import About from '../components/About.astro';
+import SocialCTA from '../components/SocialCTA.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+	title="10devet - Fudbal ispričan drugačije"
+	description="10devet — fudbalske priče, dokumentarci i ljudi iza igre."
+>
+	<main>
+	<Hero />
+	<FeaturedStory />
+	<LatestStories />
+
+	<About />
+	<SocialCTA />
+</main>
 </Layout>

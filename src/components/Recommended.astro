@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import { getYoutubeThumbnail } from '../utils/youtube';
+
+const price = (await getCollection('price'))
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const currentPath = Astro.url.pathname;
+
+const content = price
+	.map((item) => ({
+		...item.data,
+		thumbnail: getYoutubeThumbnail(item.data.youtube, item.data.thumbnail),
+		type: 'PRIČA',
+		slug: `/najnovije-price/${item.id}`,
+	}))
+	.filter((item) => item.slug !== currentPath)
+	.filter((item) => item.youtube)
+	.slice(0, 3);
+---
+
+<section class="recommended">
+
+	<div class="recommended-header">
+		<p class="section-label">10DEVET · IZBOR</p>
+		<h2>PREDLOŽENO<br /><span>ZA VAS.</span></h2>
+	</div>
+
+	<div class="recommended-grid">
+
+		{content.map((item) => (
+			<a href={item.slug} class="recommended-card">
+
+				<div class="card-image">
+					{item.thumbnail && (
+						<img
+							src={item.thumbnail}
+							alt={item.title}
+							loading="lazy"
+						/>
+					)}
+
+					<div class="play-button">▶</div>
+				</div>
+
+				<div class="card-info">
+					<p>{item.type}</p>
+					<h3>{item.title}</h3>
+					<span>{item.duration} →</span>
+				</div>
+
+			</a>
+		))}
+
+	</div>
+
+</section>
+
+<style>
+	.recommended {
+		padding: 120px 6.7vw;
+		border-top: 1px solid rgba(224, 214, 205, 0.1);
+	}
+
+	.recommended-header {
+		margin-bottom: 65px;
+	}
+
+	.section-label {
+		margin: 0 0 22px;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		color: var(--red);
+	}
+
+	.recommended-header h2 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(75px, 9vw, 130px);
+		line-height: 0.85;
+	}
+
+	.recommended-header h2 span {
+		color: var(--red);
+	}
+
+	.recommended-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 28px;
+	}
+
+	.recommended-card {
+	display: block;
+	transition: transform 0.3s ease;
+}
+
+.recommended-card:hover {
+	transform: translateY(-6px);
+}
+.card-info h3 {
+	transition: color 0.25s ease;
+}
+
+.recommended-card:hover .card-info h3 {
+	color: var(--red);
+}
+
+	.card-image {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		background: #111;
+		overflow: hidden;
+	}
+
+	.card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.4s ease;
+	}
+
+	.play-button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 58px;
+		height: 58px;
+		border: 1px solid var(--off-white);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 14px;
+		padding-left: 3px;
+		background: rgba(8, 8, 8, 0.35);
+	}
+
+	.recommended-card:hover .card-image img {
+		transform: scale(1.04);
+	}
+
+	.card-info {
+		padding-top: 20px;
+	}
+
+	.card-info p {
+		margin: 0 0 10px;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		color: var(--red);
+	}
+
+	.card-info h3 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(35px, 3vw, 50px);
+		line-height: 0.9;
+	}
+
+	.card-info > span {
+		display: block;
+		margin-top: 18px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+	}
+
+	@media (max-width: 800px) {
+		.recommended {
+			padding: 90px 5vw;
+		}
+
+		.recommended-grid {
+			grid-template-columns: 1fr;
+			gap: 55px;
+		}
+	}
+</style>

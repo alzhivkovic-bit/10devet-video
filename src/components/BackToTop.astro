@@ -1,0 +1,75 @@
+<button class="back-to-top" aria-label="Vrati se na početak">
+	<span>↑</span>
+	<small>VRATI SE NA POČETAK</small>
+</button>
+
+<script>
+	const button = document.querySelector('.back-to-top');
+
+	window.addEventListener('scroll', () => {
+		button?.classList.toggle('visible', window.scrollY > 500);
+	});
+
+	button?.addEventListener('click', () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
+	});
+</script>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		right: 24px;
+		bottom: 28px;
+		z-index: 90;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 8px;
+		background: transparent;
+		border: 1px solid rgba(224, 214, 205, 0.25);
+		color: var(--off-white);
+		cursor: pointer;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(15px);
+		transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+	}
+
+	.back-to-top.visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.back-to-top:hover {
+		border-color: var(--red);
+	}
+
+	.back-to-top span {
+		font-size: 22px;
+		line-height: 1;
+	}
+
+	.back-to-top small {
+		writing-mode: vertical-rl;
+		font-size: 8px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	@media (max-width: 800px) {
+		.back-to-top {
+			right: 16px;
+			bottom: 18px;
+			padding: 10px;
+		}
+
+		.back-to-top small {
+			display: none;
+		}
+	}
+</style>

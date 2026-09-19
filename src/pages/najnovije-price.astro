@@ -1,0 +1,420 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { getYoutubeThumbnail } from '../utils/youtube';
+
+const price = (await getCollection('price')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout>
+
+	<section class="stories-hero">
+		<div class="hero-number">01</div>
+
+		<div class="hero-content">
+			<p class="section-label">10DEVET · STORIES</p>
+			<h1>NAJNOVIJE<br /><span>PRIČE.</span></h1>
+			<p class="hero-description">
+				Fudbalske priče, ljudi i događaji ispričani iz drugačijeg ugla.
+			</p>
+		</div>
+	</section>
+
+
+	<section class="stories-section">
+
+		
+
+		<div class="stories-list">
+	{price.map((story) => (
+		<article class="story-card">
+			<a href={`/najnovije-price/${story.id}`} class="story-image">
+				<img
+	src={getYoutubeThumbnail(story.data.youtube, story.data.thumbnail)}
+	alt={story.data.title}
+/>
+				<div class="play-button">▶</div>
+			</a>
+
+			<div class="story-info">
+				<p class="story-meta">10DEVET · PRIČA</p>
+				<h3>{story.data.title}</h3>
+				<p>{story.data.description}</p>
+
+				<a href={`/najnovije-price/${story.id}`}>
+					POGLEDAJ PRIČU <span>→</span>
+				</a>
+			</div>
+		</article>
+	))}
+</div>
+
+	</section>
+
+
+	<section class="stories-cta">
+
+			
+	</section>
+
+
+	<section class="stories-cta">
+		<p class="section-label">10DEVET</p>
+
+		<h2>
+			FUDBAL ISPRIČAN<br />
+			<span>DRUGAČIJE.</span>
+		</h2>
+
+		<p>Priča se nastavlja.</p>
+
+		<a href="/najnovije-price">
+    POGLEDAJ SVE PRIČE <span>→</span>
+</a>
+	</section>
+
+</Layout>
+
+
+<style>
+
+	.stories-hero {
+		position: relative;
+		min-height: 75vh;
+		padding: 180px 6.7vw 100px;
+		display: flex;
+		align-items: flex-end;
+		border-bottom: 1px solid rgba(224, 214, 205, 0.1);
+		overflow: hidden;
+	}
+
+	.hero-number {
+		position: absolute;
+		top: 70px;
+		right: 5vw;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(180px, 28vw, 430px);
+		line-height: 0.8;
+		color: rgba(224, 214, 205, 0.035);
+		pointer-events: none;
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+		max-width: 900px;
+	}
+
+	.section-label {
+		margin: 0 0 24px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.hero-content h1 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(100px, 15vw, 220px);
+		line-height: 0.8;
+		letter-spacing: 0.01em;
+	}
+
+	.hero-content h1 span {
+		color: var(--red);
+	}
+
+	.hero-description {
+		max-width: 500px;
+		margin: 42px 0 0;
+		font-size: 17px;
+		line-height: 1.7;
+		color: rgba(224, 214, 205, 0.65);
+	}
+
+
+	.stories-section {
+		padding: 130px 6.7vw;
+	}
+
+	.section-header {
+		display: grid;
+		grid-template-columns: 1fr 0.7fr;
+		gap: 80px;
+		align-items: end;
+		margin-bottom: 90px;
+	}
+
+	.section-header h2 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(80px, 10vw, 150px);
+		line-height: 0.82;
+	}
+
+	.section-header h2 span {
+		color: var(--red);
+	}
+
+	.section-intro {
+		max-width: 420px;
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.8;
+		color: rgba(224, 214, 205, 0.6);
+	}
+
+.stories-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 90px 45px;
+}
+
+	.story-card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(224, 214, 205, 0.1);
+}
+
+	.story-image {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		background:
+			linear-gradient(135deg, #181818, #0c0c0c);
+		overflow: hidden;
+	}
+	.story-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.4s ease;
+}
+
+.story-card:hover .story-image img {
+	transform: scale(1.04);
+}
+
+	.play-button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 72px;
+		height: 72px;
+		border: 1px solid rgba(224, 214, 205, 0.6);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		padding-left: 4px;
+	}
+
+	.story-info {
+		max-width: 500px;
+	}
+
+	.story-meta {
+		margin: 0 0 20px;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.15em;
+		color: var(--red);
+	}
+
+	.story-info h3 {
+		margin: 0;
+		font-family: 'Bebas Neue', sans-serif;
+		font-size: clamp(48px, 5vw, 78px);
+		line-height: 0.9;
+	}
+
+	.story-info > p {
+		margin: 25px 0 30px;
+		font-size: 15px;
+		line-height: 1.7;
+		color: rgba(224, 214, 205, 0.6);
+	}
+
+	.story-info a {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	.story-info a span {
+		font-size: 18px;
+		transition: transform 0.2s ease;
+	}
+
+	.story-info a:hover span {
+		transform: translateX(5px);
+	}
+
+
+	.stories-cta {
+		position: relative;
+		padding: 140px 6.7vw;
+		background: var(--red);
+		color: var(--black);
+		overflow: hidden;
+	}
+
+	.stories-cta h2 {
+	position: relative;
+	z-index: 1;
+	margin: 0;
+	font-family: 'Bebas Neue', sans-serif;
+	font-size: clamp(90px, 14vw, 210px);
+	line-height: 0.95;
+	letter-spacing: 0.02em;
+}
+
+.stories-cta h2 span {
+	color: var(--off-white);
+}
+
+	.stories-cta > p:not(.section-label) {
+		position: relative;
+		z-index: 1;
+		margin: 35px 0 0;
+		font-size: 16px;
+	}
+
+.stories-cta a {
+	display: inline-flex;
+	align-items: center;
+	gap: 15px;
+	margin-top: 55px;
+	color: var(--black);
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+}
+
+.stories-cta a span {
+	font-size: 22px;
+	transition: transform 0.25s ease;
+}
+
+.stories-cta a:hover span {
+	transform: translateX(6px);
+}
+
+
+
+	@media (max-width: 800px) {
+
+		.stories-hero {
+			min-height: 70vh;
+			padding: 150px 5vw 70px;
+		}
+
+		.hero-content h1 {
+			font-size: clamp(85px, 23vw, 150px);
+		}
+
+		.section-header {
+			grid-template-columns: 1fr;
+			gap: 35px;
+			margin-bottom: 60px;
+		}
+
+		.section-header h2 {
+			font-size: 90px;
+		}
+
+		.stories-section {
+			padding: 90px 5vw;
+		}
+
+		.story-card {
+			grid-template-columns: 1fr;
+			gap: 35px;
+			padding-bottom: 60px;
+		}
+
+		.story-info h3 {
+			font-size: 58px;
+		}
+
+		.stories-list {
+    display: grid;
+    grid-template-columns: repeat(2, 0.8fr);
+    justify-content: center;
+    gap: 70px 36px;
+}
+
+			.stories-cta a {
+	width: 100%;
+	height: 140px;
+	margin-top: 55px;
+}
+
+		.stories-cta h2 {
+			font-size: 90px;
+			line-height: 0.9;
+		}
+
+	.stories-cta a {
+	width: 100%;
+	height: 140px;
+	margin-top: 55px;
+}
+
+	margin-top: 55px;
+
+	border: 2px solid var(--black);
+	color: var(--black);
+
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+
+	transition:
+		background 0.3s ease,
+		color 0.3s ease;
+}
+
+.stories-cta a span {
+	font-size: 22px;
+	transition: transform 0.25s ease;
+}
+
+.stories-cta a::after {
+	content: '';
+	position: absolute;
+	left: 65px;
+	right: 65px;
+	bottom: 48px;
+	height: 2px;
+	background: var(--black);
+	transition: background 0.3s ease;
+}
+
+.stories-cta a:hover {
+	background: var(--black);
+	color: var(--off-white);
+}
+
+.stories-cta a:hover span {
+	transform: translateX(6px);
+}
+
+.stories-cta a:hover::after {
+	background: var(--off-white);
+}
+
+	} /* ← OVA ZAGRADA JE BITNA */
+
+
+</style>
