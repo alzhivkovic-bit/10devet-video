@@ -9,9 +9,9 @@ const description =
 	Astro.props.description ??
 	'10devet — fudbalske priče, dokumentarci i ljudi iza igre.';
 
-const ogImage =
-	Astro.props.ogImage ??
-	'https://10devet.com/og-image.jpg';
+const ogImage = Astro.props.ogImage
+	? new URL(Astro.props.ogImage, 'https://10devet.com').href
+	: 'https://10devet.com/og-image.jpg';
 
 const ogType =
 	Astro.props.ogType ?? 'website';
@@ -39,7 +39,6 @@ const canonicalURL =
     <title>{title}</title>
 		
 
-		<title>{title}</title>
 
 		<meta name="description" content={description} />
 
