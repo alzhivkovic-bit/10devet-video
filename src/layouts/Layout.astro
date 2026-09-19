@@ -4,14 +4,20 @@ import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 
 const title = Astro.props.title ?? '10devet — Fudbal ispričan drugačije';
+
 const description =
 	Astro.props.description ??
 	'10devet — fudbalske priče, dokumentarci i ljudi iza igre.';
-	const ogImage =
 
+const ogImage =
 	Astro.props.ogImage ??
 	'https://10devet.com/og-image.jpg';
-	
+
+const ogType =
+	Astro.props.ogType ?? 'website';
+
+const canonicalURL =
+	new URL(Astro.url.pathname, 'https://10devet.com').href;
 ---
 
 <!doctype html>
@@ -19,27 +25,37 @@ const description =
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content={description} />
-		<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:type" content="website" />
-<meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content="10devet" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-<link rel="canonical" href={`https://10devet.com${Astro.url.pathname}`} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
-	rel="stylesheet"
-/>
-
-<link rel="icon" type="image/png" href="/favicon.png" />
 
 		<title>{title}</title>
+
+		<meta name="description" content={description} />
+
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:site_name" content="10devet" />
+		<meta property="og:locale" content="sr_RS" />
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link rel="icon" type="image/png" href="/favicon.png" />
 	</head>
 <body>
 	<div class="page-wipe"></div>
