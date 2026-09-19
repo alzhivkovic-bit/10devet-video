@@ -10,7 +10,9 @@ const description =
 	'10devet — fudbalske priče, dokumentarci i ljudi iza igre.';
 
 const ogImage = Astro.props.ogImage
-	? new URL(Astro.props.ogImage, 'https://10devet.com').href
+	? Astro.props.ogImage.startsWith('http')
+		? Astro.props.ogImage
+		: `https://10devet.com${Astro.props.ogImage}`
 	: 'https://10devet.com/og-image.jpg';
 
 const ogType =
