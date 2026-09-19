@@ -31,9 +31,11 @@ const canonicalURL = new URL(
     Astro.site ?? 'https://10devet.com'
 ).href;
 
-const imageURL = thumbnail?.startsWith('http')
-    ? thumbnail
-    : new URL(thumbnail, 'https://10devet.com').href;
+const imageURL = thumbnail
+    ? thumbnail.startsWith('http')
+        ? thumbnail
+        : new URL(thumbnail, 'https://10devet.com').href
+    : 'https://10devet.com/og-image.jpg';
 
 const youtubeURL = youtube?.startsWith('http')
     ? youtube
@@ -153,7 +155,47 @@ const schema = {
 				<span>VIDEO USKORO</span>
 			</div>
 		)}
+<!-- SHARE -->
+<div class="story-share">
+    <span class="share-label">PODELI PRIČU</span>
 
+    <div class="share-buttons">
+        <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.href)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Podeli na Facebook"
+        >
+            f
+        </a>
+
+        <a
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.url.href)}&text=${encodeURIComponent(title)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Podeli na X"
+        >
+            𝕏
+        </a>
+
+        <a
+            href={`https://wa.me/?text=${encodeURIComponent(`${title} — ${Astro.url.href}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Podeli na WhatsApp"
+        >
+            W
+        </a>
+
+        <button
+            type="button"
+            class="copy-link"
+            aria-label="Kopiraj link"
+        >
+            ↗
+        </button>
+    </div>
+</div>
 
 		<!-- STORY TEXT -->
 		<article class="story-content">
@@ -230,6 +272,18 @@ const schema = {
 `;
 			});
 		});
+		document.querySelectorAll<HTMLButtonElement>('.copy-link').forEach((button) => {
+    button.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(window.location.href);
+
+        const original = button.textContent;
+        button.textContent = '✓';
+
+        setTimeout(() => {
+            button.textContent = original;
+        }, 1500);
+    });
+});
 </script>
 
 
@@ -554,6 +608,106 @@ const schema = {
 		width: 100%;
 		justify-content: center;
 	}
+	
 	}
+	/* SHARE */
+
+.story-share {
+    width: min(1200px, 86vw);
+    margin: 0 auto;
+    padding: 42px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(224, 214, 205, 0.1);
+}
+
+.share-label {
+    color: rgba(224, 214, 205, 0.5);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.share-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.share-buttons a,
+.share-buttons button {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(224, 214, 205, 0.25);
+    background: transparent;
+    color: var(--off-white);
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.share-buttons a:hover,
+.share-buttons button:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--off-white);
+    transform: translateY(-2px);
+}
+
+.copy-wrapper {
+    position: relative;
+}
+
+.copy-notification {
+    position: absolute;
+    right: 0;
+    top: 58px;
+    padding: 7px 10px;
+    background: var(--off-white);
+    color: var(--black);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transform: translateY(-5px);
+    pointer-events: none;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.copy-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 800px) {
+    .story-share {
+        width: 100%;
+        padding: 32px 5vw;
+    }
+
+    .share-buttons {
+        gap: 8px;
+    }
+
+    .share-buttons a,
+    .share-buttons button {
+        width: 44px;
+        height: 44px;
+        font-size: 15px;
+    }
+}
 
 </style>
