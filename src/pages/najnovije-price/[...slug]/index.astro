@@ -15,15 +15,81 @@ export async function getStaticPaths() {
 const { story } = Astro.props;
 
 const {
-	title,
-	description,
-	thumbnail,
-	youtube,
-	duration,
-	type,
+    title,
+    description,
+    thumbnail,
+    youtube,
+    duration,
+    type,
+    date,
 } = story.data;
 
 const videoType = type === 'long' ? 'LONG FORM' : 'SHORT';
+
+const canonicalURL = new URL(
+    `/najnovije-price/${story.id}/`,
+    Astro.site ?? 'https://10devet.com'
+).href;
+
+const imageURL = thumbnail?.startsWith('http')
+    ? thumbnail
+    : new URL(thumbnail, 'https://10devet.com').href;
+
+const youtubeURL = youtube?.startsWith('http')
+    ? youtube
+    : undefined;
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'Article',
+            '@id': `${canonicalURL}#article`,
+            headline: title,
+            description,
+            image: [imageURL],
+            datePublished: new Date(date).toISOString(),
+            dateModified: new Date(date).toISOString(),
+            author: {
+                '@type': 'Organization',
+                name: '10devet',
+                url: 'https://10devet.com',
+            },
+            publisher: {
+                '@type': 'Organization',
+                name: '10devet',
+                url: 'https://10devet.com',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://10devet.com/og-image.jpg',
+                },
+            },
+            mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': canonicalURL,
+            },
+        },
+
+        ...(youtubeURL
+            ? [
+                  {
+                      '@type': 'VideoObject',
+                      '@id': `${canonicalURL}#video`,
+                      name: title,
+                      description,
+                      thumbnailUrl: [imageURL],
+                      uploadDate: new Date(date).toISOString(),
+                      contentUrl: youtubeURL,
+                      publisher: {
+                          '@type': 'Organization',
+                          name: '10devet',
+                          url: 'https://10devet.com',
+                      },
+                  },
+              ]
+            : []),
+    ],
+};
 ---
 
 <Layout
@@ -122,6 +188,11 @@ const videoType = type === 'long' ? 'LONG FORM' : 'SHORT';
 	</section>
 </Layout>
 
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(schema)}
+></script>
 
 <script>
 	document
